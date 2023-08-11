@@ -1,0 +1,99 @@
+.gradient-background {
+    background: linear-gradient(109.6deg, rgba(156, 252, 248, 1) 11.2%, rgb(110, 123, 251, 1) 91.1%, rgb(26, 180, 223, 1));
+    background-size: 180% 180%;
+    animation: gradient-animation 7s ease infinite;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+main {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.big-box {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.box-date {
+  background-color: blueviolet;
+  width: 50%;
+  border-radius: 7px;
+  height: auto
+}
+
+.date-text {
+  color: #fff;
+  padding: 10px;
+}
+
+.box {
+  background-color: white ;
+  border: 1px solid white;
+  padding: 10px;
+  box-shadow: 2px 4px 6px #c1c1c1;
+  width: 50%;
+  border-radius: 7px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-form {
+  width: 90%;
+  margin: 0;
+}
+
+#new-task {
+  width: 90%;
+  height: 40px;
+  border: 1px solid rgb(194, 194, 194);
+  border-radius: 7px;
+}
+
+::placeholder { 
+  padding-left: 20px;
+}
+
+#submit-task {
+  margin-left: 10px;
+  border-radius: 7px;
+  border: 1px solid rgb(194, 194, 194);
+
+}
+
+.task-items {
+  width: 90%;
+  height: 2rem;
+  border-radius: 7px;
+  border: 1px solid rgb(255, 172, 94);
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.task-text {
+  margin: 0;
+}
+
+.completed {
+  text-decoration: line-through;
+}
