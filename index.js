@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 let taskArray = [];
+let workArray = [];
 const currentDate = new Date();
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const monthsOfYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -30,6 +31,25 @@ app.post("/addnewtask", (req, res)=> {
         currentMonth: month,
         currentDate: date,
         taskArrayToday: taskArray,
+    })
+})
+
+app.get("/work", (req, res) => {
+    res.render("work.ejs", {
+        currentDay: day,
+        currentMonth: month,
+        currentDate: date,
+    });
+})
+
+app.post("/work/addnewwork", (req, res)=> {
+    let work = req.body["newwork"];
+    workArray.push(work);
+    res.render("work.ejs", {
+        currentDay: day,
+        currentMonth: month,
+        currentDate: date,
+        workArrayToday: workArray,
     })
 })
 
