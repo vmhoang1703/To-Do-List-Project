@@ -20,18 +20,14 @@ app.get("/", (req, res) => {
         currentDay: day,
         currentMonth: month,
         currentDate: date,
+        taskArrayToday: taskArray,
     });
 })
 
 app.post("/addnewtask", (req, res)=> {
     let task = req.body["newtask"];
     taskArray.push(task);
-    res.render("index.ejs", {
-        currentDay: day,
-        currentMonth: month,
-        currentDate: date,
-        taskArrayToday: taskArray,
-    })
+    res.redirect("/")
 })
 
 app.get("/work", (req, res) => {
@@ -39,18 +35,14 @@ app.get("/work", (req, res) => {
         currentDay: day,
         currentMonth: month,
         currentDate: date,
+        workArrayToday: workArray,
     });
 })
 
 app.post("/work/addnewwork", (req, res)=> {
     let work = req.body["newwork"];
     workArray.push(work);
-    res.render("work.ejs", {
-        currentDay: day,
-        currentMonth: month,
-        currentDate: date,
-        workArrayToday: workArray,
-    })
+    res.redirect("/work");
 })
 
 app.listen(port, () => {
