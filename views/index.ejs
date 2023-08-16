@@ -11,11 +11,11 @@
                 <input type="submit" id="submit-task" value="Add">
             </form>
         
-            <% if(locals.taskArrayToday) { %>
-                <% taskArrayToday.forEach((task) => { %>
+            <% if(locals.taskToday) { %>
+                <% taskToday.forEach((task) => { %>
                     <div class="task-items mb-3">
                         <input class="myCheckBox" type="checkbox" id="task1">
-                        <p class="task-text ps-3"><%= task %></p>
+                        <p class="task-text ps-3"><%= task.name %></p>
                     </div>  
                 <% }) %>
             <% } %>

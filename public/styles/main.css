@@ -82,7 +82,8 @@ main {
 
 .task-items {
   width: 90%;
-  height: 2rem;
+  height: auto;
+  min-height: 2rem;
   border-radius: 7px;
   border: 1px solid rgb(255, 172, 94);
   display: flex;

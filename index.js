@@ -30,11 +30,7 @@ const task3 = new Task ({
     name: "<-- Hit this to delete a task."
 })
 
-const defaultTasks = [task1, task2, task3];
-
-Task.insertMany(defaultTasks)
-    .then(console.log("Successfully inserted."))
-    .catch(err => console.log(err)); 
+const defaultTasks = [task1, task2, task3]; 
 
 
 let taskArray = [];
@@ -46,13 +42,28 @@ let date = currentDate.getDate();
 let day = daysOfWeek[currentDate.getDay()];
 let month = monthsOfYear[currentDate.getMonth()];
 
-app.get("/", (req, res) => {
-    res.render("index.ejs", {
-        currentDay: day,
-        currentMonth: month,
-        currentDate: date,
-        taskArrayToday: taskArray,
-    });
+app.get("/", async(req, res) => {
+    try {
+        const tasks = await Task.find({});
+        if(tasks.length === 0) {
+            await Task.insertMany(defaultTasks)
+                .then(() => {
+                    console.log("Successfully inserted.");
+                })
+                .catch(err => console.log(err));
+            res.redirect("/");
+        } else {
+            res.render("index.ejs", {
+                currentDay: day,
+                currentMonth: month,
+                currentDate: date,
+                taskToday: tasks,
+            });
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 app.post("/addnewtask", (req, res)=> {
@@ -79,3 +90,5 @@ app.post("/work/addnewwork", (req, res)=> {
 app.listen(port, () => {
     console.log(`Server is running at port ${port}`);
 })
+
+    
