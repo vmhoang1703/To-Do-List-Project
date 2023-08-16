@@ -1,10 +1,41 @@
 import express from "express";
 import bodyParser from "body-parser";
+import mongoose, { connect, model } from "mongoose";
 const app = express();
 const port = 3000;
+const { Schema } = mongoose;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+mongoose.connect("mongodb://127.0.0.1:27017/toDoListDB", {
+    useNewUrlParser: true
+});
+
+const tasksSchema = new Schema({
+    name: String
+});
+
+const Task = mongoose.model("Task", tasksSchema);
+
+const task1 = new Task ({
+    name: "Welcome to your To Do List!"
+})
+
+const task2 = new Task ({
+    name: "Add new your task on the search box."
+})
+
+const task3 = new Task ({
+    name: "<-- Hit this to delete a task."
+})
+
+const defaultTasks = [task1, task2, task3];
+
+Task.insertMany(defaultTasks)
+    .then(console.log("Successfully inserted."))
+    .catch(err => console.log(err)); 
+
 
 let taskArray = [];
 let workArray = [];
