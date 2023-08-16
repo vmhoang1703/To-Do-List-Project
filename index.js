@@ -32,9 +32,6 @@ const task3 = new Task ({
 
 const defaultTasks = [task1, task2, task3]; 
 
-
-let taskArray = [];
-let workArray = [];
 const currentDate = new Date();
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const monthsOfYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -48,7 +45,7 @@ app.get("/", async(req, res) => {
         if(tasks.length === 0) {
             await Task.insertMany(defaultTasks)
                 .then(() => {
-                    console.log("Successfully inserted.");
+                    console.log("Successfully inserted default tasks.");
                 })
                 .catch(err => console.log(err));
             res.redirect("/");
@@ -66,10 +63,17 @@ app.get("/", async(req, res) => {
     }
 })
 
-app.post("/addnewtask", (req, res)=> {
-    let task = req.body["newtask"];
-    taskArray.push(task);
-    res.redirect("/")
+app.post("/addnewtask", async (req, res)=> {
+    try {
+        const newTaskName = req.body["newtask"];
+        const newTask = new Task({
+            name: newTaskName
+        });
+        await newTask.save();
+        res.redirect("/");
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 app.get("/work", (req, res) => {
