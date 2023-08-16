@@ -32,6 +32,13 @@ const task3 = new Task ({
 
 const defaultTasks = [task1, task2, task3]; 
 
+const listsSchema = new Schema ({
+    name: String,
+    tasks: [tasksSchema]
+})
+
+const List = mongoose.model("List", listsSchema);
+
 const currentDate = new Date();
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const monthsOfYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -65,12 +72,25 @@ app.get("/", async(req, res) => {
 
 app.post("/addnewtask", async (req, res)=> {
     try {
-        const newTaskName = req.body["newtask"];
+        const newTaskName = req.body.newtask;
+        const listName = req.body.list;
         const newTask = new Task({
             name: newTaskName
         });
-        await newTask.save();
-        res.redirect("/");
+
+        if(listName !== "Today"){
+            await List.findOne({name: listName})
+                .then((listNameFound) => {
+                    listNameFound.tasks.push(newTask);
+                    listNameFound.save();
+                    res.redirect("/" + listName);
+                })
+                .catch(err => console.log(err));
+        } else {
+            await newTask.save();
+            res.redirect("/");
+        }
+        
     } catch (error) {
         console.log(error);
     }
@@ -83,6 +103,28 @@ app.post("/delete", async(req, res) => {
             .then(() => console.log("Successfully deleted."))
             .catch((err) => console.log(err));
         res.redirect("/");
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.get("/:customListName", async(req, res) => {
+    try {
+        const customListName = req.params.customListName;
+        const customListNameChecked = await List.findOne({name: customListName}).exec();
+        if(customListNameChecked){
+            res.render("list.ejs", {
+                listTitle: customListNameChecked.name,
+                newListTask: customListNameChecked.tasks
+            })
+        } else {
+            const list = new List ({
+                name: customListName,
+                tasks: defaultTasks
+            })
+            await list.save();
+            res.redirect("/" + customListName);
+        }
     } catch (error) {
         console.log(error);
     }
