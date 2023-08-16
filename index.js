@@ -76,6 +76,18 @@ app.post("/addnewtask", async (req, res)=> {
     }
 })
 
+app.post("/delete", async(req, res) => {
+    try {
+        const idTaskChecked = req.body.checkbox;
+        await Task.findByIdAndDelete(idTaskChecked)
+            .then(() => console.log("Successfully deleted."))
+            .catch((err) => console.log(err));
+        res.redirect("/");
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 app.get("/work", (req, res) => {
     res.render("work.ejs", {
         currentDay: day,

@@ -13,10 +13,12 @@
         
             <% if(locals.taskToday) { %>
                 <% taskToday.forEach((task) => { %>
-                    <div class="task-items mb-3">
-                        <input class="myCheckBox" type="checkbox" id="task1">
-                        <p class="task-text ps-3"><%= task.name %></p>
-                    </div>  
+                    <form action="/delete" class="list-form" method="post">
+                        <div class="task-items mb-3">
+                            <input class="myCheckBox" type="checkbox" id="task" name="checkbox" value="<%= task._id %>" onChange="this.form.submit()">
+                            <p class="task-text ps-3"><%= task.name %></p>
+                        </div>  
+                    </form>
                 <% }) %>
             <% } %>
         </div>
