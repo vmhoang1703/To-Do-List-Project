@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import mongoose, { connect, model } from "mongoose";
 import _ from "lodash";
 const app = express();
-const port = 3000;
 const { Schema } = mongoose;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -144,8 +143,13 @@ app.get("/:customListName", async(req, res) => {
     }
 })
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 app.listen(port, () => {
-    console.log(`Server is running at port ${port}`);
+    console.log("Server has started successfully.");
 })
 
     
