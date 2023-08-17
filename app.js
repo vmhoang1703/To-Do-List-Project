@@ -48,6 +48,14 @@ let month = monthsOfYear[currentDate.getMonth()];
 
 app.get("/", async(req, res) => {
     try {
+        res.redirect("/Today");
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.get("/Today", async(req, res) => {
+    try {
         const tasks = await Task.find({});
         if(tasks.length === 0) {
             await Task.insertMany(defaultTasks)
@@ -55,12 +63,13 @@ app.get("/", async(req, res) => {
                     console.log("Successfully inserted default tasks.");
                 })
                 .catch(err => console.log(err));
-            res.redirect("/");
+            res.redirect("/Today");
         } else {
             res.render("index.ejs", {
                 currentDay: day,
                 currentMonth: month,
                 currentDate: date,
+                listTitle: "Today",
                 taskToday: tasks,
             });
         }
@@ -81,7 +90,7 @@ app.post("/addnewtask", async (req, res)=> {
 
         if(listName === "Today"){
             await newTask.save();
-            res.redirect("/");
+            res.redirect("/Today");
         } else {
             await List.findOne({name: listName})
                 .then((listNameFound) => {
