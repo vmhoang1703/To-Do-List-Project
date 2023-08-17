@@ -115,7 +115,7 @@ app.post("/delete", async(req, res) => {
             await Task.findByIdAndDelete(idTaskChecked)
                 .then(() => console.log("Successfully deleted."))
                 .catch((err) => console.log(err));
-            res.redirect("/");
+            res.redirect("/Today");
         } else {
             await List.findOneAndUpdate({name: listNameChecked}, {$pull: {tasks: {_id: idTaskChecked}}})
                 .then(() => {
