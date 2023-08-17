@@ -9,7 +9,7 @@ const { Schema } = mongoose;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://127.0.0.1:27017/toDoListDB", {
+mongoose.connect("mongodb+srv://admin_HoangVu:test123@cluster0.0l50ogx.mongodb.net/toDoListDB", {
     useNewUrlParser: true
 });
 
@@ -83,7 +83,7 @@ app.post("/addnewtask", async (req, res)=> {
         if(listName === "Today"){
             await newTask.save();
             res.redirect("/");
-        } else {``
+        } else {
             await List.findOne({name: listName})
                 .then((listNameFound) => {
                     listNameFound.tasks.push(newTask);
