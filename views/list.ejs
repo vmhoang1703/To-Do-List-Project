@@ -17,7 +17,8 @@
                         <div class="task-items mb-3">
                             <input class="myCheckBox" type="checkbox" id="task" name="checkbox" value="<%= task._id %>" onChange="this.form.submit()">
                             <p class="task-text ps-3"><%= task.name %></p>
-                        </div>  
+                        </div> 
+                        <input type="hidden" name="listName" id="" value="<%= listTitle %>"> 
                     </form>
                 <% }) %>
             <% } %>

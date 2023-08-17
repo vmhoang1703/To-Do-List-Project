@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose, { connect, model } from "mongoose";
+import _ from "lodash";
 const app = express();
 const port = 3000;
 const { Schema } = mongoose;
@@ -73,12 +74,16 @@ app.get("/", async(req, res) => {
 app.post("/addnewtask", async (req, res)=> {
     try {
         const newTaskName = req.body.newtask;
-        const listName = req.body.list;
+        const listName = _.capitalize(req.body.list);
+
         const newTask = new Task({
             name: newTaskName
         });
 
-        if(listName !== "Today"){
+        if(listName === "Today"){
+            await newTask.save();
+            res.redirect("/");
+        } else {``
             await List.findOne({name: listName})
                 .then((listNameFound) => {
                     listNameFound.tasks.push(newTask);
@@ -86,11 +91,8 @@ app.post("/addnewtask", async (req, res)=> {
                     res.redirect("/" + listName);
                 })
                 .catch(err => console.log(err));
-        } else {
-            await newTask.save();
-            res.redirect("/");
-        }
-        
+        } 
+
     } catch (error) {
         console.log(error);
     }
@@ -99,10 +101,22 @@ app.post("/addnewtask", async (req, res)=> {
 app.post("/delete", async(req, res) => {
     try {
         const idTaskChecked = req.body.checkbox;
-        await Task.findByIdAndDelete(idTaskChecked)
-            .then(() => console.log("Successfully deleted."))
-            .catch((err) => console.log(err));
-        res.redirect("/");
+        const listNameChecked = req.body.listName;
+
+        if(listNameChecked === "Today"){
+            await Task.findByIdAndDelete(idTaskChecked)
+                .then(() => console.log("Successfully deleted."))
+                .catch((err) => console.log(err));
+            res.redirect("/");
+        } else {
+            await List.findOneAndUpdate({name: listNameChecked}, {$pull: {tasks: {_id: idTaskChecked}}})
+                .then(() => {
+                    res.redirect("/" + listNameChecked);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }        
     } catch (error) {
         console.log(error);
     }
@@ -110,7 +124,7 @@ app.post("/delete", async(req, res) => {
 
 app.get("/:customListName", async(req, res) => {
     try {
-        const customListName = req.params.customListName;
+        const customListName = _.capitalize(req.params.customListName);
         const customListNameChecked = await List.findOne({name: customListName}).exec();
         if(customListNameChecked){
             res.render("list.ejs", {
@@ -128,21 +142,6 @@ app.get("/:customListName", async(req, res) => {
     } catch (error) {
         console.log(error);
     }
-})
-
-app.get("/work", (req, res) => {
-    res.render("work.ejs", {
-        currentDay: day,
-        currentMonth: month,
-        currentDate: date,
-        workArrayToday: workArray,
-    });
-})
-
-app.post("/work/addnewwork", (req, res)=> {
-    let work = req.body["newwork"];
-    workArray.push(work);
-    res.redirect("/work");
 })
 
 app.listen(port, () => {
